@@ -96,29 +96,6 @@ def create_project_entry(date_str, project):
 
 
 class Timesheet:
-    @staticmethod
-    def setup(projects: tuple[str] = None):
-        """
-        Creates an empty file projects.json in this directory
-        :param projects: Optional, Comma separated list of projects
-        e.g. timesheet setup --projects=project1,project2
-        """
-        if not os.path.exists('projects.json'):
-            with open('projects.json', 'w') as f:
-
-                if projects is None:
-                    projects = []
-                # otherwise make sure it's a tuple of strings
-                else:
-                    if not (isinstance(projects, tuple) and all(isinstance(p, str) for p in projects)):
-                        raise TypeError("projects must be a comma separated list of project names"
-                                        "e.g. timesheet setup --projects=project1,project2")
-                json.dump(projects, f)
-            print(f'✅ Timesheet setup complete with projects {", ".join(projects)}. '
-                  'Please use timesheet add-project and timesheet delete-project to add and delete projects.')
-        else:
-            raise FileExistsError("This directory already has a projects.json file. Please use "
-                                  "timesheet add-project and timesheet delete-project instead.")
 
     @staticmethod
     def add_project(name: str):
@@ -127,13 +104,16 @@ class Timesheet:
         :param name: project name
         If projects.json does not exist or the name is already in the list create it
         """
-        projects = Timesheet.list_projects()
-        if name in projects:
-            print(f"Project {name} already exists.")
-            return
-        projects.append(name)
-        with open('projects.json', 'w') as f:
-            json.dump(projects, f)
+        if not os.path.exists('projects.json'):
+            json.dump([name], open('projects.json', 'w'))
+        else:
+            projects = Timesheet.list_projects()
+            if name in projects:
+                print(f"Project {name} already exists.")
+                return
+            projects.append(name)
+            with open('projects.json', 'w') as f:
+                json.dump(projects, f)
         print(f"✅ Project {name} has been added.")
 
     @staticmethod
