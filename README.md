@@ -7,6 +7,7 @@ Install the package using
 ```shell
 pip install git+https://github.com/tomginsberg/timesheet.git
 ```
+Run `timesheet -h` to confirm install
 
 *Note this project uses python dependencies `fire` and `iterfzf` which will automatically be installed*
 
