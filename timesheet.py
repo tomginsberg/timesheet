@@ -77,12 +77,15 @@ def create_project_entry(date_str, project):
             print("Invalid input for hours. Please enter a number.")
             continue
     notes_file = os.path.join(date_str, f"{project}-notes.txt")
+    with open(notes_file, 'w') as f:
+        f.write(f'Notes for project: {project}\n')
     subprocess.run(['vim', notes_file])
     media_folder = None
     if input("Do you have any additional media to attach? (y/n): ").lower() == 'y':
-        media_folder = os.path.join(date_str, f"{project}-media")
+        media_folder = os.path.join(date_str, f"{project.replace(' ', '_')}-media")
         os.makedirs(media_folder)
-        input(f"🎥 Press Enter once you have copied all the media you want to attach to {media_folder}.")
+        input(
+            f"🎥 Press Enter once you have copied all the media you want to attach to {os.path.realpath(media_folder)}")
     entry = {
         'name': project,
         'notes': notes_file,
@@ -247,8 +250,8 @@ class Timesheet:
 
         with open(os.path.join(date_str, 'timesheet.json'), 'w') as f:
             json.dump(timesheet, f)
-
-        print("Summary of the entered information:")
+        print('✅ Timesheet created.')
+        print("\nSummary of the entered information:\n")
         Timesheet.show(date_str)
 
     @staticmethod
