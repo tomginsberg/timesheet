@@ -435,5 +435,9 @@ class Timesheet:
             print("Timesheet has been updated.")
 
 
-if __name__ == '__main__':
+def main():
     fire.Fire(Timesheet)
+
+
+if __name__ == '__main__':
+    main()
