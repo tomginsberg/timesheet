@@ -68,6 +68,7 @@ def is_valid_date_dir(directory: str):
 
 
 def create_project_entry(date_str, project):
+    formatted_name = project.replace(' ', '_')
     while True:
         hours = input(f"🕒 How many hours did you spend on {project}? ")
         try:
@@ -76,13 +77,13 @@ def create_project_entry(date_str, project):
         except ValueError:
             print("Invalid input for hours. Please enter a number.")
             continue
-    notes_file = os.path.join(date_str, f"{project}-notes.txt")
+    notes_file = os.path.join(date_str, f"{formatted_name}-notes.txt")
     with open(notes_file, 'w') as f:
         f.write(f'Notes for project: {project}\n')
     subprocess.run(['vim', notes_file])
     media_folder = None
     if input("Do you have any additional media to attach? (y/n): ").lower() == 'y':
-        media_folder = os.path.join(date_str, f"{project.replace(' ', '_')}-media")
+        media_folder = os.path.join(date_str, f"{formatted_name}-media")
         os.makedirs(media_folder)
         input(
             f"🎥 Press Enter once you have copied all the media you want to attach to {os.path.realpath(media_folder)}")
